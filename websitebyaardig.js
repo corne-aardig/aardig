@@ -1,14 +1,26 @@
-// Eenvoudige script voor logo weergave
-// Dit gebruikt een vereenvoudigde aanpak zonder afhankelijkheid van ASCII-art
+// ASCII art logo display script met kleiner logo
+const logo = `                                                     %%%%%  %%%%%%                
+                                                    %%%%%  %%%%%%                
+    @%%%%%%        %%%%%%%     @%%%%  @%%    %%%%%% %%%%%  %%%%%%    @%%%%@ %%%%%
+ %%%%%%%%%%%%   @%%%%%%%%%%%@  @%%%%%%%%%  @%%%%%%%%%%%%%  %%%%%%  %%%%%%%%%%%%%%
+%%%%%%  %%%%%%  %%%%%@ @%%%%%  @%% @%%%%% @%%%%%%%%%% @%%  %%%%%% %%%%%%%%%%%%%%%
+  %%%%%%%@ %%%    %%%%%%%  %%  %%%%%%%    %%%%%%   %%%%%%  %%%%%% %%%%%%   %%%%%%
+%%%%%%%%%%%%%%  %%%%%%%%%%%%%  %%%%%%     %%%%%%   %%%%%%  %%%%%% %%%%%%   %%%%%%
+%%%%%  %%%%%%% %%%%%%  %%%%%%  %%%%%%     %%%%%%% %%%%%%%  %%%%%%  %%%%%%%%%% %%%
+%%%%%%%%%%%%%% %%%%%%%%%%%%%%@ %%%%%%      %%%%%%%%%%%%%%  %%%%%%   %%%%%%%%%%%%%
+ @%%%%%%%%%%%%   %%%%%%@%%%%%@ @%%%%%       @%%%%%%%%%%%%  %%%%%%  %%%%%%% %%%%%%
+                                                                   %%%%%%%%%%%%%%
+                                                                   @%%%%%%%%%%%@ 
+      %%%            %%                                                @%%%%     
+      %%%%%%%%%%%%%%%%%%                                                         
+         %%%%%%%%%%%@`;
 
-// Het logo in een string (als fallback indien geen SVG beschikbaar is)
-const logoText = `aardig`;
-
-// Maak een box met tekst
-function createBox(text, headerText = "Developed by aardig", footerText = "www.aardig.amsterdam") {
-  const maxLength = Math.max(text.length + 4, headerText.length + 4, footerText.length + 4);
+// Functie om logo in een kader te plaatsen met tekst
+function createFramedLogo(title = "Developed by aardig", footer = "www.aardig.amsterdam") {
+  const lines = logo.split('\n');
+  const maxWidth = Math.max(...lines.map(line => line.length));
   
-  // Box characters
+  // Kader karakters
   const topLeft = '╔';
   const topRight = '╗';
   const bottomLeft = '╚';
@@ -16,45 +28,33 @@ function createBox(text, headerText = "Developed by aardig", footerText = "www.a
   const horizontal = '═';
   const vertical = '║';
   
-  // Create top border
-  let output = topLeft + horizontal.repeat(maxLength - 2) + topRight + '\n';
+  // Maak bovenkant van kader
+  let result = topLeft + horizontal.repeat(maxWidth + 2) + topRight + '\n';
   
-  // Add the logo text centered
-  const textPaddingLeft = Math.floor((maxLength - text.length - 2) / 2);
-  const textPaddingRight = maxLength - text.length - 2 - textPaddingLeft;
-  output += vertical + ' ' + ' '.repeat(textPaddingLeft) + text + ' '.repeat(textPaddingRight) + ' ' + vertical + '\n';
+  // Voeg logo toe met verticale randen
+  lines.forEach(line => {
+    const padding = ' '.repeat(maxWidth - line.length);
+    result += vertical + ' ' + line + padding + ' ' + vertical + '\n';
+  });
   
-  // Add spacing line
-  output += vertical + ' ' + ' '.repeat(maxLength - 4) + ' ' + vertical + '\n';
+  // Voeg lege regel toe voor wat ruimte
+  result += vertical + ' ' + ' '.repeat(maxWidth) + ' ' + vertical + '\n';
   
-  // Add header text centered
-  const headerPaddingLeft = Math.floor((maxLength - headerText.length - 2) / 2);
-  const headerPaddingRight = maxLength - headerText.length - 2 - headerPaddingLeft;
-  output += vertical + ' ' + ' '.repeat(headerPaddingLeft) + headerText + ' '.repeat(headerPaddingRight) + ' ' + vertical + '\n';
+  // Voeg titel toe (gecentreerd)
+  const titlePaddingLeft = Math.floor((maxWidth - title.length) / 2);
+  const titlePaddingRight = maxWidth - title.length - titlePaddingLeft;
+  result += vertical + ' ' + ' '.repeat(titlePaddingLeft) + title + ' '.repeat(titlePaddingRight) + ' ' + vertical + '\n';
   
-  // Add footer text centered
-  const footerPaddingLeft = Math.floor((maxLength - footerText.length - 2) / 2);
-  const footerPaddingRight = maxLength - footerText.length - 2 - footerPaddingLeft;
-  output += vertical + ' ' + ' '.repeat(footerPaddingLeft) + footerText + ' '.repeat(footerPaddingRight) + ' ' + vertical + '\n';
+  // Voeg footer toe (gecentreerd)
+  const footerPaddingLeft = Math.floor((maxWidth - footer.length) / 2);
+  const footerPaddingRight = maxWidth - footer.length - footerPaddingLeft;
+  result += vertical + ' ' + ' '.repeat(footerPaddingLeft) + footer + ' '.repeat(footerPaddingRight) + ' ' + vertical + '\n';
   
-  // Create bottom border
-  output += bottomLeft + horizontal.repeat(maxLength - 2) + bottomRight;
+  // Maak onderkant van kader
+  result += bottomLeft + horizontal.repeat(maxWidth + 2) + bottomRight;
   
-  return output;
+  return result;
 }
 
-// Poging om logo te laden of val terug op tekst
-try {
-  // Toon de box met logo tekst
-  console.log("%c" + createBox(logoText), "font-family: monospace; font-size: 16px;");
-  
-  // Ook tonen hoe het er uit zou kunnen zien met een grotere box
-  console.log("\nHier is het met meer ruimte:");
-  console.log("%c" + createBox("   " + logoText + "   "), "font-family: monospace; font-size: 16px;");
-  
-  // Ook een alternatief tonen met tekst boven en onder
-  console.log("\nAls alternatief kun je dit gebruiken:");
-  console.log("%c╔═══════════════════════════════════╗\n║    Developed by aardig           ║\n║           www.aardig.amsterdam    ║\n╚═══════════════════════════════════╝", "font-family: monospace; font-size: 16px;");
-} catch (e) {
-  console.error("Fout bij het weergeven van logo:", e);
-}
+// Toon het logo in de console met monospace lettertype voor correcte weergave
+console.log("%c" + createFramedLogo(), "font-family: monospace; white-space: pre;");
