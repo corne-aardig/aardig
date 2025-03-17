@@ -1,5 +1,6 @@
 // ASCII art logo display script
-const logo = `                                                                                                %%%%%%%%%     %%%%%%%%%                               
+// Using monospace font to preserve formatting
+const logo = String.raw`                                                                                                %%%%%%%%%     %%%%%%%%%                               
                                                                                                 %%%%%%%%%     %%%%%%%%%                               
                                                                                                 %%%%%%%%%     %%%%%%%%%                               
                                                                                                 %%%%%%%%%     %%%%%%%%%                               
@@ -32,6 +33,7 @@ const logo = `                                                                  
 
 // Creating a nice border around the entire output
 function createBorderedOutput(logo) {
+    // Split the logo into lines and find the maximum length
     const lines = logo.split('\n');
     const maxLength = Math.max(...lines.map(line => line.length));
     
@@ -46,8 +48,9 @@ function createBorderedOutput(logo) {
     // Create top border
     let output = topLeft + horizontal.repeat(maxLength + 2) + topRight + '\n';
     
-    // Add the logo with vertical borders
+    // Add the logo with vertical borders, preserving exact spacing
     lines.forEach(line => {
+        // Make sure we maintain exact spacing in the original
         const padding = ' '.repeat(maxLength - line.length);
         output += vertical + ' ' + line + padding + ' ' + vertical + '\n';
     });
@@ -76,4 +79,5 @@ function createBorderedOutput(logo) {
 }
 
 // Display the bordered logo in console
-console.log(createBorderedOutput(logo));
+// Using a monospace font is essential for proper display
+console.log("%c" + createBorderedOutput(logo), "font-family: monospace; white-space: pre;");
